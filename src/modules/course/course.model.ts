@@ -41,8 +41,8 @@ courseSchema.pre("save", function (next) {
   const startDate = new Date(this.startDate).getTime();
   const endDate = new Date(this.endDate).getTime();
 
-  const millisecondsInWeek = 7 * 24 * 60 * 60 * 1000;
-  const totalWeeks = Math.ceil((endDate - startDate) / millisecondsInWeek);
+  const weekToMilliseconds = 7 * 24 * 60 * 60 * 1000;
+  const totalWeeks = Math.ceil((endDate - startDate) / weekToMilliseconds);
 
   this.set("durationInWeeks", totalWeeks);
 

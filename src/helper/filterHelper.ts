@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Query } from "mongoose";
-import TQueryObj from "../types/TQueryObj";
+import IQueryObj from "../types/IQueryObj";
 
-export const filterHelper = <T>(model: Query<T[], T>, query: TQueryObj) => {
+export const filterHelper = <T>(model: Query<T[], T>, query: IQueryObj) => {
     const excludeFields = ['page', 'limit', 'sortBy', 'sortOrder', 'minPrice', 'maxPrice'];
     const queryObj:any = { ...query };
 
@@ -11,7 +11,7 @@ export const filterHelper = <T>(model: Query<T[], T>, query: TQueryObj) => {
         queryObj['details.level'] = queryObj.level;
         delete queryObj.level;
     }
-    excludeFields.forEach(el => delete queryObj[el as keyof TQueryObj]);
+    excludeFields.forEach(el => delete queryObj[el as keyof IQueryObj]);
     
     const result = model.find(queryObj);
     return result;

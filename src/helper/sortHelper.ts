@@ -1,7 +1,7 @@
 import { Query } from "mongoose";
-import TQueryObj from "../types/TQueryObj";
+import IQueryObj from "../types/IQueryObj";
 
-export const sortHelper = <T>(model: Query<T[], T>, query: TQueryObj) => {
+export const sortHelper = <T>(model: Query<T[], T>, query: IQueryObj) => {
     if (query.sortBy && query.sortOrder) {
         const sortBy = query.sortBy;
         const sortOrder = query.sortOrder || "asc";

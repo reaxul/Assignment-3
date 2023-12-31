@@ -2,7 +2,7 @@ import { Request, RequestHandler, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
 import { CourseServices } from "./course.service";
 import { sendSuccessResponse } from "../../utils/sendSuccessResponse";
-import TQueryObj from "../../types/TQueryObj";
+import IQueryObj from "../../types/IQueryObj";
 
 const createCourseIntoDB: RequestHandler = catchAsync(
     async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ const createCourseIntoDB: RequestHandler = catchAsync(
 
 const getAllCourseFromDB: RequestHandler = catchAsync(
     async (req: Request, res: Response) => {
-        const query: TQueryObj = req.query;
+        const query: IQueryObj = req.query;
         const course = await CourseServices.getAllCourseFromDB(query);
 
         const meta: Record<string, string | number> = {
@@ -35,7 +35,20 @@ const getAllCourseFromDB: RequestHandler = catchAsync(
     },
 );
 
+const updateCourseIntoDB: RequestHandler = catchAsync(
+    async (req: Request, res: Response) => {
+        const { courseId } = req.params;
+        const course = await CourseServices.updateCourseIntoDB(courseId, req.body);
+        sendSuccessResponse(res, {
+            statusCode: 200,
+            message: "Course updated successfully",
+            data: course,
+        });
+    },
+)
+
 export const CourseController = {
     createCourseIntoDB,
-    getAllCourseFromDB
+    getAllCourseFromDB,
+    updateCourseIntoDB,
 }

@@ -1,7 +1,7 @@
 import { Query } from "mongoose";
-import TQueryObj from "../types/TQueryObj";
+import IQueryObj from "../types/IQueryObj";
 
-export const paginateHelper = <T>(model: Query<T[], T>, query: TQueryObj) => {
+export const paginateHelper = <T>(model: Query<T[], T>, query: IQueryObj) => {
     if (query.page || query.limit) {
         const page = Number(query.page) || 1;
         const limit = Number(query.limit) || 10;

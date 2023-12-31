@@ -1,4 +1,4 @@
-type TQueryObj = {
+interface IQueryObj {
     page?: string;
     limit?: string;
     sortBy?: string;
@@ -14,4 +14,4 @@ type TQueryObj = {
     level?: string;
 }
 
-export default TQueryObj;
+export default IQueryObj;
