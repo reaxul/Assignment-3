@@ -12,8 +12,6 @@ app.use(cors());
 
 // application routes
 app.use('/api', globalRouter);
-app.use(globalErrorHandler);
-app.use(notFound);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
@@ -21,5 +19,8 @@ app.get("/", (req: Request, res: Response) => {
     message: "Server is running!",
   });
 });
+
+app.use(globalErrorHandler);
+app.use(notFound);
 
 export default app;

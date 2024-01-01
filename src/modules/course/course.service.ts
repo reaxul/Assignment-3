@@ -1,8 +1,8 @@
-import { object } from "zod";
 import { getQuery } from "../../helper/queryHelper";
 import IQueryObj from "../../types/IQueryObj";
 import { ICourse } from "./course.interface";
 import { Course } from "./course.model";
+import mongoose from "mongoose";
 
 const createCourseIntoDB = async (payload: ICourse): Promise<ICourse> => {
     const result = await Course.create(payload);
@@ -36,8 +36,69 @@ const updateCourseIntoDB = async (id: string, payload: Partial<ICourse>): Promis
     return result;
 }
 
+const getCourseWithReviews = async (courseId: string) => {
+    const result = await Course.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(courseId) } },
+        {
+            $lookup: {
+                from: "reviews",
+                localField: "_id",
+                foreignField: "courseId",
+                as: "reviews",
+            },
+        },
+    ]);
+    return result;
+}
+
+const getBestCourseFromDB = async () => {
+    const result = await Course.aggregate([
+        // first stage
+        {
+            $lookup: {
+                from: "reviews",
+                localField: "_id",
+                foreignField: "courseId",
+                as: "reviews",
+            },
+        },
+
+        // second stage
+        {
+            $addFields: {
+                averageRating: { $avg: "$reviews.rating" },
+                reviewCount: { $size: "$reviews" },
+            },
+        },
+
+        // third stage
+        {
+            $sort: {
+                averageRating: -1, reviewCount: -1,
+            },
+        },
+
+        // fourth stage
+        {
+            $limit: 1,
+        },
+
+        // fifth stage
+        {
+            $project: {
+                reviews: false,
+            },
+        },
+    ]);
+
+    return result;
+};
+
+
 export const CourseServices = {
     createCourseIntoDB,
     getAllCourseFromDB,
     updateCourseIntoDB,
+    getCourseWithReviews,
+    getBestCourseFromDB,
 }

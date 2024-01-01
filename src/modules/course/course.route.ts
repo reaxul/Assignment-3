@@ -10,7 +10,11 @@ router.post('/course',
 
 router.get('/courses', CourseController.getAllCourseFromDB)
 
-router.patch('/courses/:courseId',
+router.put('/courses/:courseId',
     validateRequest(updateCourseSchemaValidation), CourseController.updateCourseIntoDB)
+
+router.get('/courses/:courseId/reviews', CourseController.getCourseWithReviews)
+
+router.get("/course/best", CourseController.getBestCourseFromDB);
 
 export const CourseRouter = router;
